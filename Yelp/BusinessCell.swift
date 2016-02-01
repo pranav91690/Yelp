@@ -27,14 +27,26 @@ class BusinessCell: UITableViewCell {
     var business : Business!{
         // DisSet is an observer --> From the observer pattern i guess!!
         didSet {
-            ThumbNail.setImageWithURL(business.imageURL!)
+            if let image = business.imageURL{
+                ThumbNail.setImageWithURL(image)
+            }
             BusinessName.text = business.name!
             Distance.text = business.distance!
             numberOfReviews.text = "\(business.reviewCount!) Reviews"
             address.text = business.address!
             cuisine.text = business.categories!
-            Rating.setImageWithURL(business.ratingImageURL!)
+            if let ratingUrl = business.ratingImageURL{
+                Rating.setImageWithURL(ratingUrl)
+            }
         }
+    }
+    
+    override func layoutSubviews() {
+        // Always call the Parent SubView
+        super.layoutSubviews()
+        
+        // Preferred Wrapping Point
+        BusinessName.preferredMaxLayoutWidth = BusinessName.frame.size.width
     }
     
     
@@ -43,6 +55,9 @@ class BusinessCell: UITableViewCell {
         // Initialization code
         ThumbNail.layer.cornerRadius = 3
         ThumbNail.clipsToBounds = true
+        
+        // Preferred Wrapping Point
+        BusinessName.preferredMaxLayoutWidth = BusinessName.frame.size.width
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
